@@ -13,9 +13,9 @@ except ImportError:
     Image = None
     ImageSequence = None
 
-# =====================================================================
+
 # INITIALIZATION & SETUP
-# =====================================================================
+
 pygame.init()
 
 WIDTH, HEIGHT = 1000, 650
@@ -33,7 +33,6 @@ FONT_MORALE = pygame.font.SysFont("Arial", 30, bold=True)
 FONT_XL = pygame.font.SysFont("Arial", 34, bold=True)
 FONT_MONO = pygame.font.SysFont("Consolas", 14)
 
-# Resolve assets relative to this script, not the terminal's working directory.
 BASE_DIR = Path(__file__).resolve().parent
 
 WHITE = (255, 255, 255)
@@ -44,7 +43,7 @@ RED = (220, 20, 60)
 DARK_RED = (139, 0, 0)
 GOLD = (255, 215, 0)
 
-# Storm palette: deliberately compressed contrast, but still readable.
+# Storm palette with compressed contrast, but still readable.
 STORM_PANEL = (61, 65, 66)
 STORM_PANEL_HOVER = (68, 72, 72)
 STORM_BORDER = (105, 108, 106)
@@ -129,8 +128,7 @@ def load_gif_frames(names, size):
         try:
             frames, durations = [], []
             with Image.open(path) as gif:
-                # GIFs are often stored as partial/optimized frames. Building each
-                # frame from a fresh RGBA conversion makes every frame complete.
+                # GIFs
                 for frame_number in range(getattr(gif, "n_frames", 1)):
                     gif.seek(frame_number)
                     duration = int(gif.info.get("duration", 100) or 100)
@@ -180,9 +178,7 @@ crying_frame_index = 0
 crying_frame_elapsed = 0
 crying_last_tick = pygame.time.get_ticks()
 
-# =====================================================================
 # GAME STATE
-# =====================================================================
 class GameState:
     def __init__(self):
         self.phase_list = ["TUTORIAL", "TRAINING", "STORM", "GAME_OVER"]
@@ -413,7 +409,7 @@ class GameState:
         self.joy = max(0.0, self.joy - 20.0)
         self.instruction_text = message
         self.alert_bg_flash = True
-        self.panic_timer = 90  # 90 frames at 30fps = 3 continuous seconds of panic
+        self.panic_timer = 90  # 3 continuous seconds of panic
         self.log_event("MEDICAL", "Patient died; morale penalty applied")
 
     def apply_time_penalty(self):
@@ -716,9 +712,8 @@ class GameState:
 
 state = GameState()
 ai_teammate = AITeammate()
-# =====================================================================
+
 # RENDERING MODULES
-# =====================================================================
 def draw_panel_button(screen, rect, title, lines, mouse_pos, line_colors=None, warning=False):
     hover = rect.collidepoint(mouse_pos)
     if warning:
@@ -793,7 +788,7 @@ def draw_instruction_panel():
         title_color = GOLD
         body_color = WHITE
 
-    # Strong shadow, thick border, and bold type keep instructions prominent.
+    # Strong shadow, thick border, and bold type keep instructions bold and easier to seee.
     shadow_rect = instruction_rect.move(4, 4)
     pygame.draw.rect(screen, (0, 0, 0), shadow_rect, border_radius=9)
     pygame.draw.rect(screen, banner_color, instruction_rect, border_radius=9)
@@ -946,7 +941,6 @@ def draw_end_screen(mouse_pos):
     title = FONT_XL.render(f"SESSION COMPLETE — {outcome}", True, (220, 222, 215))
     screen.blit(title, (50, 38))
 
-    # Show the full humorous ending message on the results screen.
     ending_message = state.instruction_text
     ending_rect = pygame.Rect(55, 88, 890, 62)
     draw_text_wrapped(screen, ending_message, FONT_MED, (202, 205, 198), ending_rect)
@@ -1024,9 +1018,9 @@ def draw_end_screen(mouse_pos):
     screen.blit(FONT_SMALL.render(status, True, (137, 145, 141)), (50, 607))
     return restart_rect, save_rect, quit_rect
 
-# =====================================================================
+
 # MAIN RUN LOOP
-# =====================================================================
+
 clock = pygame.time.Clock()
 TIMER_EVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(TIMER_EVENT, 1000)
