@@ -6,7 +6,7 @@ Files required in the same folder:
 3. The same image/GIF assets used by the original game
 
 Run:
-    python panda_camp_ai_version.py
+    python panda_camp.py
 
 Group assignment:
 - Control group: run the game and do not press the activation shortcut.
