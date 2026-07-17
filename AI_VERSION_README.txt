@@ -1,10 +1,5 @@
 PANDA CAMP — AI EXPERIMENT VERSION
 
-Files required in the same folder:
-1. panda_camp_ai_version.py
-2. ai_teammate.py
-3. The same image/GIF assets used by the original game
-
 Run:
     python panda_camp.py
 
